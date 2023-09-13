@@ -3,30 +3,35 @@ use std::{cell::Cell, rc::Rc};
 use super::*;
 
 struct TestJob {
-    has_executed: Rc<Cell<bool>>,
+    execution_count_ref: Rc<Cell<i32>>,
 }
 
 impl Job for self::TestJob {
-    fn cron(&self) -> &'static str {
-        "* * * * * *"
+    fn cron(&self) -> &str {
+        "*/2 * * * * * *" // every 2 seconds
     }
 
     fn run(&mut self) {
-        self.has_executed.set(true);
+        self.execution_count_ref
+            .set(self.execution_count_ref.get() + 1);
     }
 }
 
 #[test]
-fn scheduler_runs_job() {
+fn scheduler_runs_job_at_time() {
     let mut scheduler = Scheduler::new();
 
-    let has_executed = Rc::new(Cell::new(false));
+    let execution_count = Rc::new(Cell::new(0));
+    let execution_count_ref = execution_count.clone();
 
     scheduler.add(Box::new(TestJob {
-        has_executed: has_executed.clone(),
+        execution_count_ref,
     }));
 
-    scheduler.run();
+    for _ in 0..4 {
+        std::thread::sleep(std::time::Duration::from_millis(1000));
+        scheduler.run();
+    }
 
-    assert!(has_executed.get());
+    assert_eq!(execution_count.get(), 2);
 }

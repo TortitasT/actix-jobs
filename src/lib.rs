@@ -1,10 +1,17 @@
+use std::str::FromStr;
+
+use chrono::Local;
+use cron::Schedule;
+
 #[cfg(test)]
 mod tests;
 
 pub trait Job {
     fn run(&mut self);
 
-    fn cron(&self) -> &'static str;
+    // sec min hour day_of_month month day_of_week year
+    // example: "0 0 0 1 1 * *" (every year on January 1st at midnight)
+    fn cron(&self) -> &str;
 }
 
 pub struct Scheduler {
@@ -22,6 +29,20 @@ impl Scheduler {
 
     pub fn run(&mut self) {
         for job in &mut self.jobs {
+            let expression = job.cron();
+            let schedule = Schedule::from_str(expression).unwrap();
+            let now = Local::now();
+
+            let mut upcoming = schedule.upcoming(Local).take(1);
+            let upcoming = match upcoming.next() {
+                Some(datetime) => datetime,
+                None => continue,
+            };
+
+            if upcoming.timestamp() > (now.timestamp() + 1) {
+                continue;
+            }
+
             job.run();
         }
     }
