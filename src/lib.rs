@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{str::FromStr, time::Duration};
 
 use chrono::Local;
 use cron::Schedule;
@@ -46,4 +46,14 @@ impl Scheduler {
             job.run();
         }
     }
+}
+
+pub fn run_forever(mut scheduler: Scheduler) {
+    actix_rt::spawn(async move {
+        loop {
+            scheduler.run();
+
+            actix_rt::time::sleep(Duration::from_millis(500)).await;
+        }
+    });
 }

@@ -1,4 +1,4 @@
-use std::{cell::Cell, rc::Rc};
+use std::{cell::Cell, fs::File, io::Write, rc::Rc};
 
 use super::*;
 
@@ -34,4 +34,29 @@ fn scheduler_runs_job_at_time() {
     }
 
     assert_eq!(execution_count.get(), 2);
+}
+
+struct TestFileJob;
+
+impl Job for self::TestFileJob {
+    fn cron(&self) -> &str {
+        "*/2 * * * * * *" // every 2 seconds
+    }
+
+    fn run(&mut self) {
+        // TODO: something to check if the job is running
+    }
+}
+
+#[actix_rt::test]
+async fn scheduler_runs_job_forever() {
+    let mut scheduler = Scheduler::new();
+
+    scheduler.add(Box::new(TestFileJob));
+
+    run_forever(scheduler);
+
+    // std::thread::sleep(std::time::Duration::from_millis(6000));
+
+    // TODO: something to check if the job is running
 }
