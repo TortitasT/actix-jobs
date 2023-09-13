@@ -53,7 +53,7 @@ pub fn run_forever(mut scheduler: Scheduler) {
         loop {
             scheduler.run();
 
-            actix_rt::time::sleep(Duration::from_millis(500)).await;
+            actix_rt::time::sleep(Duration::from_millis(1000)).await;
         }
     });
 }
