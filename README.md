@@ -8,7 +8,7 @@ A simple job scheduler for Actix.
 
 ## Usage
 
-Simple example. For mor information please refer to [the Docs](https://docs.rs/actix-jobs/latest/actix_jobs/).
+Simple example. For more information please refer to [the Docs](https://docs.rs/actix-jobs/latest/actix_jobs/).
 
 ```rust
 use actix_jobs::{Job, Scheduler, run_forever};
@@ -21,7 +21,7 @@ impl Job for MyJob {
     }
 
     fn run(&mut self) {
-        println!("Hello, world!");
+        println!("Sending an email to all our clients...");
     }
 }
 
