@@ -3,6 +3,8 @@
 [![Tests](https://github.com/TortitasT/actix-jobs/actions/workflows/tests.yaml/badge.svg)](https://github.com/TortitasT/actix-jobs/actions/workflows/tests.yaml)
 ![Crates.io](https://img.shields.io/crates/v/actix-jobs)
 ![Crates.io](https://img.shields.io/crates/d/actix-jobs)
+[![Docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.rs/actix-jobs/latest/actix_jobs/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A simple job scheduler for Actix.
 
