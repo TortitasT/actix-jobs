@@ -8,15 +8,20 @@
 
 A simple job scheduler for Actix.
 
+## Install
+
+```bash
+cargo add actix-jobs
+```
+
 ## Usage
 
-Simple example. For more information please refer to [the Docs](https://docs.rs/actix-jobs/latest/actix_jobs/).
+Minimal example. For more information please refer to [the Docs](https://docs.rs/actix-jobs/latest/actix_jobs/).
 
 ```rust
 use actix_jobs::{Job, Scheduler, run_forever};
 
 struct MyJob;
-
 impl Job for MyJob {
     fn cron(&self) -> &str {
         "*/2 * * * * * *" // every two seconds
@@ -27,7 +32,7 @@ impl Job for MyJob {
     }
 }
 
-#[actix_rt::main]
+#[actix_web::main]
 async fn main() {
     let mut scheduler = Scheduler::new();
     scheduler.add(Box::new(MyJob));
@@ -38,8 +43,35 @@ async fn main() {
 }
 ```
 
-## Install
+### Calling async functions inside `run`
 
-```bash
-cargo add actix-jobs
+This can be archieved via `actix_rt::spawn` as shown bellow.
+
+```rust
+use actix_jobs::{Job, Scheduler, run_forever};
+
+struct MyJob;
+impl Job for MyJob {
+    fn cron(&self) -> &str {
+        "*/2 * * * * * *" // every two seconds
+    }
+
+    fn run(&mut self) {
+        actix_rt::spawn(async move {
+            actix_rt::time::sleep(Duration::from_millis(1000)).await;
+
+            println!("Some more async stuff...");
+        }
+    }
+}
+
+#[actix_web::main]
+async fn main() {
+    let mut scheduler = Scheduler::new();
+    scheduler.add(Box::new(MyJob));
+
+    run_forever(scheduler); // This will start the scheduler in a new thread.
+
+    // The rest of your program...
+}
 ```
