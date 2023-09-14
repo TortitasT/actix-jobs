@@ -43,6 +43,8 @@ async fn main() {
 }
 ```
 
+[Information about the cron syntax](https://docs.rs/actix-jobs/latest/actix_jobs/trait.Job.html).
+
 ### Calling async functions inside `run`
 
 This can be archieved via `actix_rt::spawn` as shown bellow.
