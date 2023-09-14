@@ -27,6 +27,7 @@ jobs:
 
       - name: Commit Cargo.toml
         run: |
+          git fetch
           git checkout master
           git add Cargo.toml
           git commit -m "chore: bump version ${{ github.ref_name }}"
