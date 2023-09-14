@@ -6,12 +6,34 @@ use cron::Schedule;
 #[cfg(test)]
 mod tests;
 
+/// A trait for jobs that can be scheduled.
+/// The `cron` method should return a cron expression that defines when the job should run.
+/// The `run` method will be called when the job is scheduled to run.
 pub trait Job {
-    fn run(&mut self);
-
-    // sec min hour day_of_month month day_of_week year
-    // example: "0 0 0 1 1 * *" (every year on January 1st at midnight)
+    /// | sec | min | hour | day_of_month | month | day_of_week | year |
+    /// |-----|-----|------|--------------|-------|-------------|------|
+    /// | */2 | * | * | * | * | * | * |
+    ///
+    /// This means that the job will run every 2 seconds.
+    ///
+    /// And it would be written as:
+    ///
+    /// ```rust
+    /// fn cron(&self) -> &str {
+    ///     "*/2 * * * * * *"
+    /// }
+    /// ```
     fn cron(&self) -> &str;
+
+    /// This method will be called when the job is scheduled to run.
+    /// It should contain the logic that the job should run.
+    ///
+    /// ```rust
+    /// fn run(&mut self) {
+    ///    println!("Hello, world!");
+    /// }
+    /// ```
+    fn run(&mut self);
 }
 
 pub struct Scheduler {

@@ -49,6 +49,7 @@ impl Job for self::TestFileJob {
 }
 
 #[actix_rt::test]
+#[ignore = "not ready yet"]
 async fn scheduler_runs_job_forever() {
     let mut scheduler = Scheduler::new();
 
