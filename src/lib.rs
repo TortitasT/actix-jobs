@@ -36,6 +36,37 @@ pub trait Job {
     fn run(&mut self);
 }
 
+/// A scheduler can schedule jobs.
+/// Add the jobs to the scheduler and then call `run` to run the jobs.
+///
+/// Or use `run_forever` to run the jobs forever.
+///
+/// ```rust
+/// use cron_scheduler::{Job, Scheduler, run_forever};
+///
+/// struct MyJob;
+///
+/// impl Job for MyJob {
+///     fn cron(&self) -> &str {
+///         "*/2 * * * * * *"
+///     }
+///
+///     fn run(&mut self) {
+///         println!("Hello, world!");
+///     }
+/// }
+///
+/// fn main() {
+///     let mut scheduler = Scheduler::new();
+///     scheduler.add(Box::new(MyJob));
+///
+///     run_forever(scheduler); // This will start the scheduler in a new thread.
+///
+///     // The rest of your program...
+///     loop {
+///         println!("Program running...");
+///     }
+/// }
 pub struct Scheduler {
     jobs: Vec<Box<dyn Job>>,
 }
