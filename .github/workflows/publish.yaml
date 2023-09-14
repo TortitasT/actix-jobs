@@ -26,6 +26,8 @@ jobs:
           add: "Cargo.toml"
           message: "chore: bump version ${{ github.ref_name }}"
           push: true
+          default_author: github_actions
+          new_branch: master
 
       - name: Publish
         run: cargo publish
