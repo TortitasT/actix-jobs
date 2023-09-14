@@ -14,11 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install set-version
-        run: cargo install cargo-edit
-
       - name: Bump version
-        run: cargo set-version ${{ github.ref_name }}
+        run: cargo run --bin set-version ${{ github.ref_name }}
 
       - name: Set git identity
         run: |
