@@ -12,4 +12,3 @@ authors = ["Victor Garcia"]
 actix-rt = "2.9.0"
 chrono = "0.4.30"
 cron = "0.12.0"
-tokio = "1.32.0"

@@ -18,7 +18,7 @@ pub trait Job {
     ///
     /// And it would be written as:
     ///
-    /// ```rust
+    /// ```rust,ignore
     /// fn cron(&self) -> &str {
     ///     "*/2 * * * * * *"
     /// }
@@ -28,7 +28,7 @@ pub trait Job {
     /// This method will be called when the job is scheduled to run.
     /// It should contain the logic that the job should run.
     ///
-    /// ```rust
+    /// ```rust,ignore
     /// fn run(&mut self) {
     ///    println!("Hello, world!");
     /// }
@@ -42,7 +42,7 @@ pub trait Job {
 /// Or use `run_forever` to run the jobs forever.
 ///
 /// ```rust
-/// use cron_scheduler::{Job, Scheduler, run_forever};
+/// use actix_jobs::{Job, Scheduler, run_forever};
 ///
 /// struct MyJob;
 ///
@@ -56,16 +56,14 @@ pub trait Job {
 ///     }
 /// }
 ///
-/// fn main() {
+/// #[actix_rt::main]
+/// async fn main() {
 ///     let mut scheduler = Scheduler::new();
 ///     scheduler.add(Box::new(MyJob));
 ///
 ///     run_forever(scheduler); // This will start the scheduler in a new thread.
 ///
 ///     // The rest of your program...
-///     loop {
-///         println!("Program running...");
-///     }
 /// }
 pub struct Scheduler {
     jobs: Vec<Box<dyn Job>>,
